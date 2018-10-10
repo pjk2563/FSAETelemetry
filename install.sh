@@ -1,5 +1,4 @@
 echo This is the install script that will handle the installation of the telemetery system on reciever pi
-su -
 apt-get update && apt-get full-upgrade -y
 apt-get install curl -y
 curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
