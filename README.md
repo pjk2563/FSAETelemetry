@@ -1,27 +1,27 @@
-[FSAETelemetry]
+# [FSAETelemetry]
 Remote Telemetry Project
 
-[Raspberry Pi]
+# [Raspberry Pi]
 OS: Arch Linux Arm
 Package manager: pacman
 https://wiki.archlinux.org/index.php/pacman
 
-[InfluxDB]
+# [InfluxDB]
 config: /etc/influxdb/influxdb.conf
 enabled
 
-[Python]
+# [Python]
 Python3 installed
 python-influxdb client installed for python-database interaction
 
-[Internet Access]
+# [Internet Access]
 Insert usb wireless card
 use 'ip a' to determine interface label (most likely wlan1)
 
 wpa_supplicant -i [interface] -B -c rit-conn.conf
 dhcpcd [interface]
 
-[Automatic AP]
+# [Automatic AP]
 hostapd, for access point management. Config is at /etc/hostapd/hostapd.conf
 dnsmasq, for dns and dhcp leasing. Config is at /etc/dnsmasq.conf
 systemd-networkd, for persistent static ip. /etc/systemd/network/wlan0.network sets static ip on reboot for wlan0 interface. 
