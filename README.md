@@ -12,6 +12,15 @@ Package manager: pacman
 
 https://wiki.archlinux.org/index.php/pacman
 
+# [Grafana]
+directory: /home/ritfsae/grafana/
+
+config: /etc/grafana.ini
+
+logs: /home/ritfsae/grafana/data/log
+
+enabled
+
 # [InfluxDB]
 config: /etc/influxdb/influxdb.conf
 
