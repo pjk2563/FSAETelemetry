@@ -5,7 +5,6 @@ jl3560@rit.edu
 
 Reads certain formatted data and places it into influx database
 """
-import argparse
 from influxdb import InfluxDBClient
 
 dictionary = {}
@@ -14,9 +13,11 @@ labls = ['rpm', 'volt', 'gear', 'tmp', 'spd', 'gfs']
 for val in labls:
     dictionary[val] = []
 
-def main(host='192.168.43.1', port=3000):
+def main():
     getData("random.dat")
     #print(dictionary['rpm'])
+    host='192.168.43.1'
+    port=3000
     user = 'admin'
     password = 'temp'
     dbname = 'FSAETelemetry'
@@ -35,13 +36,5 @@ def getData(filename):
         else:
             dictionary[temp[0]] = float(temp[1])
 
-def parse_args():
-    """Parse the args."""
-    parser = argparse.ArgumentParser(description='example code to play with InfluxDB')
-    parser.add_argument('--host', type=str, required=False, default='192.168.43.1', help='hostname of InfluxDB http API')
-    parser.add_argument('--port', type=int, required=False, default=3000, help='port of InfluxDB http API')
-    return parser.parse_args()
-
 if __name__ == '__main__': 
-    args = parse_args()
-    main(host=args.host, port=args.port)
+    main()
