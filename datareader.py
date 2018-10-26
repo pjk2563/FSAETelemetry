@@ -5,38 +5,25 @@ jl3560@rit.edu
 
 Reads certain formatted data and places it into influx database
 """
-
+import argparse
 from influxdb import InfluxDBClient
-'''
-client = InfluxDBClient(host, port, user, password, dbname)
 
-client.create_database(dbname)
-
- json_body = [
-        {
-            "measurement": "cpu_load_short",
-            "tags": {
-                "host": "server01",
-                "region": "us-west"
-            },
-            "time": "2009-11-10T23:00:00Z",
-            "fields": {
-                "value": 0.64
-            }
-        }
-    ]
-
-client.write_points(json_body)
-'''
 dictionary = {}
 #make 2d list
 labls = ['rpm', 'volt', 'gear', 'tmp', 'spd', 'gfs']
 for val in labls:
     dictionary[val] = []
 
-def main():
+def main(host='192.168.43.1', port=3000):
     getData("random.dat")
     #print(dictionary['rpm'])
+    user = 'admin'
+    password = 'temp'
+    dbname = 'FSAETelemetry'
+
+    client = InfluxDBClient(host, port, user, password, dbname)
+    client.create_database(dbname)
+    client.write_points([dictionary])
 
 def getData(filename):
     file=open(filename, 'r')
@@ -47,5 +34,14 @@ def getData(filename):
             dictionary[temp[0]].append(float(temp[1]))
         else:
             dictionary[temp[0]] = float(temp[1])
-    
-main()
+
+def parse_args():
+    """Parse the args."""
+    parser = argparse.ArgumentParser(description='example code to play with InfluxDB')
+    parser.add_argument('--host', type=str, required=False, default='192.168.43.1', help='hostname of InfluxDB http API')
+    parser.add_argument('--port', type=int, required=False, default=3000, help='port of InfluxDB http API')
+    return parser.parse_args()
+
+if __name__ == '__main__': 
+    args = parse_args()
+    main(host=args.host, port=args.port)
