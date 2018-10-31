@@ -17,16 +17,20 @@ for val in labls:
 def main():
     getData("telemetry-data.csv")
     print(str(dictionary['nmot']))
-    """
+    
+    #credentials
     host='192.168.43.1'
     port=3000
-    user = 'admin'
-    password = 'temp'
-    dbname = 'FSAETelemetry'
+    #user = 'admin'
+    #password = 'temp'
+    dbname = 'Telemetry'
 
-    client = InfluxDBClient(host, port, user, password, dbname)
+    print("creating client")
+    client = InfluxDBClient(host, port, dbname)
+    print("creating database")
     client.create_database(dbname)
-    client.write_points([dictionary])"""
+    print("writing to database")
+    client.write_points([dictionary])
 
 def getData(filename):
     time = 0.0
@@ -34,9 +38,9 @@ def getData(filename):
     #add data to dictionary according to label
     for line in file:
         temp = line.split(",")
-        if(temp[0] == "wait"):
+        if(temp[0] == "wait"): #keep track of time
             time += float(temp[1])
-        else:
+        else: #map to dictionary
             dictionary[labls[0]].append(time)
             dictionary[labls[1]].append(float(temp[0]))
             dictionary[labls[2]].append(float(temp[1]))
