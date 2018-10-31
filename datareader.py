@@ -15,8 +15,8 @@ for val in labls:
     dictionary[val] = []
 
 def main():
-    getData("random.dat")
-    #print(dictionary['rpm'])
+    getData("telemetry-data.csv")
+    print(str(dictionary['rpm']))
     """
     host='192.168.43.1'
     port=3000
@@ -33,12 +33,13 @@ def getData(filename):
     #add data to dictionary according to label
     for line in file:
         temp = line.split(",")
-        dictionary[labls[0]].append(float(temp[0]))
-        dictionary[labls[1]].append(float(temp[1]))
-        dictionary[labls[2]].append(float(temp[2]))
-        dictionary[labls[3]].append(float(temp[3]))
-        dictionary[labls[4]].append(float(temp[4]))
-        dictionary[labls[5]].append(float(temp[5]))
-
+        if(temp[0] == "ECU_IDprim"):
+            dictionary[labls[0]].append(float(temp[1]))
+            dictionary[labls[1]].append(float(temp[2]))
+            dictionary[labls[2]].append(float(temp[3]))
+            dictionary[labls[3]].append(float(temp[4]))
+            dictionary[labls[4]].append(float(temp[5]))
+            dictionary[labls[5]].append(float(temp[6]))
+        
 if __name__ == '__main__': 
     main()
