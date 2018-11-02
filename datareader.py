@@ -8,48 +8,48 @@ Reads certain formatted data and places it into influx database
 """
 from influxdb import InfluxDBClient
 
-dictionary = {}
-#make 2d list
-labls = ['time','gear','nmot','poil','speed','tint','tmot','toil','ub']
-for val in labls:
-    dictionary[val] = []
+labls = ['time','gear','rpm','oilpres','speed','intakeairtemp','enginetemp','oiltemp','volt']
+filename = 'telemetry-data.csv'
 
 def main():
-    getData("telemetry-data.csv")
-    print(str(dictionary['nmot']))
     
     #credentials
-    host='192.168.43.1'
-    port=3000
+    host='localhost'
+    port=8086
     #user = 'admin'
     #password = 'temp'
     dbname = 'Telemetry'
 
-    print("creating client")
+    print("initiating client")
     client = InfluxDBClient(host, port, dbname)
-    print("creating database")
-    client.create_database(dbname)
-    print("writing to database")
-    client.write_points([dictionary])
+    # uncomment to create database, unnecessary when preexisting
+    #print("creating database") 
+    #client.create_database(dbname)
+    with open(filename) as csv:
+        time = 0.0
+        for line in csv:
+            vals = line.split(',')   # split line
 
-def getData(filename):
-    time = 0.0
-    file=open(filename, 'r')
-    #add data to dictionary according to label
-    for line in file:
-        temp = line.split(",")
-        if(temp[0] == "wait"): #keep track of time
-            time += float(temp[1])
-        else: #map to dictionary
-            dictionary[labls[0]].append(time)
-            dictionary[labls[1]].append(float(temp[0]))
-            dictionary[labls[2]].append(float(temp[1]))
-            dictionary[labls[3]].append(float(temp[2]))
-            dictionary[labls[4]].append(float(temp[3]))
-            dictionary[labls[5]].append(float(temp[4]))
-            dictionary[labls[6]].append(float(temp[5]))
-            dictionary[labls[7]].append(float(temp[6]))
-            dictionary[labls[8]].append(float(temp[7]))
+            if vals[0] == 'wait': # keep track of time
+                time += float(vals[1])
+
+            else:
+                for i in range(8):  # write each measurement to it's respective table
+                    measurement = labls[i]
+                    value = float(vals[i]) 
+                    client.write_points(genJson(measurement, value), database=dbname)
+
+# generate a proper json body for write_points
+def genJson(measurement, val):
+    json_body = [
+            {
+                "measurement": measurement,
+                "fields": {
+                    "value": val
+                }
+            }
+        ]
+    return json_body
         
 if __name__ == '__main__': 
     main()
