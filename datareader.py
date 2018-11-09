@@ -32,10 +32,12 @@ def main():
 
             if vals[0] == 'wait': # keep track of time
                 time += float(vals[1])
+                #uncomment if time is wanted (extra 2 milliseconds per line)
+                #client.write_points(genJson(labls[0], time), database=dbname)
 
             else:
-                for i in range(8):  # write each measurement to it's respective table
-                    measurement = labls[i]
+                for i in range(8):  # write each measurement to its respective table
+                    measurement = labls[i+1]
                     value = float(vals[i]) 
                     client.write_points(genJson(measurement, value), database=dbname)
 
