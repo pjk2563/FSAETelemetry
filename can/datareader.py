@@ -26,13 +26,6 @@ labls = [
     'gaslevel'
 ]
 
-canIdCaller = {
-    '0x90': dash1,           # Dash 1
-    '0xA0': dash2,           # Dash 2
-    '0x100': lftiret,        # LF Tire Temp
-    '0x110': lrtiret         # LR Tire Temp
-}
-
 serialdev = "/dev/ttyUSB0"
 serialbaud = 115200
 
@@ -59,8 +52,15 @@ def lftiret(msgData):
 def lrtiret(msgData):
     print("LR Tire Temp Can msg: " + msgData)
 
+canIdCaller = {
+    '0x90': dash1,           # Dash 1
+    '0xA0': dash2,           # Dash 2
+    '0x100': lftiret,        # LF Tire Temp
+    '0x110': lrtiret         # LR Tire Temp
+}
+
 def main():
-    
+        
     #credentials
     host='localhost'
     port=8086
@@ -68,9 +68,10 @@ def main():
     #password = 'temp'
     dbname = 'Telemetry'
 
-    print("initiating client")
+    print("initiating database client")
     client = InfluxDBClient(host, port, dbname)
 
+    print("initiating serial connection")
     with serial.Serial(serialdev, serialbaud) as ser:
         while True:
             msgId = ser.readline()
