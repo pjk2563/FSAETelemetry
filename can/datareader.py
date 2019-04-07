@@ -72,8 +72,8 @@ def main():
     print("initiating serial connection")
     with serial.Serial(serialdev, serialbaud) as ser:
         while True:
-            msgId = ser.readline().strip().decode("UTF-8")
-            msgData = ser.readline().strip().decode("UTF-8")
+            msgId = ser.readline().strip().decode("UTF-8", errors="backslashreplace")
+            msgData = ser.readline().strip().decode("UTF-8", errors="backslashreplace")
             if msgId in canIdCaller.keys():
                 # if message is valid, interpret it's data
                 if checkMessage(msgData):
