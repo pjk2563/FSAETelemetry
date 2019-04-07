@@ -24,6 +24,7 @@ serialdev = "/dev/ttyUSB0"
 serialbaud = 115200
 
 def dash1(msgData):
+#     print("new 0x90 message")
     vals = msgData.split("\t")
     rpm = int(vals[0] + vals[1], 16)
     oilt = int(vals[2], 16)
@@ -77,6 +78,7 @@ def main():
                 # if message is valid, interpret it's data
                 if checkMessage(msgData):
                     vals = canIdCaller[msgId](msgData)
+                    # print("writing measurements")
                     for measurement in vals.keys():
                         client.write_points(
                             genJson(measurement, 
@@ -87,9 +89,11 @@ def checkMessage(msgData):
     vals = msgData.split('\t')   # split line by tab
     checkValve = True
     # check if message is valid
-    if len(vals) == 8:
+    if len(vals) != 8:
+        checkValve = False
+    else:
         for s in vals:
-            if len(s) != 2: 
+            if len(s) > 2: 
                checkValve = False 
     return checkValve
 
